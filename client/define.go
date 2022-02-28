@@ -18,9 +18,13 @@
 package client
 
 const (
-	RPC_TX           = "tx"
-	RPC_FEE          = "fee"
-	RPC_ACCOUNT_INFO = "account_info"
+	RPC_TX                 = "tx"
+	RPC_FEE                = "fee"
+	RPC_ACCOUNT_INFO       = "account_info"
+	RPC_SIGN_FOR           = "sign_for"
+	RPC_SIGN               = "sign"
+	RPC_SUBMIT             = "submit"
+	RPC_SUBMIT_MULTISIGNED = "submit_multisigned"
 )
 
 type JsonRpcRequest struct {
@@ -37,4 +41,24 @@ type accountInfoReqParam struct {
 	Account string `json:"account"`
 	Strict  bool   `json:"strict"`
 	Queue   bool   `json:"queue"`
+}
+
+type sigForReqParam struct {
+	Account string `json:"account"`
+	Secret  string `json:"secret"`
+	TxJson  string `json:"tx_json"`
+}
+
+type SignRes struct {
+	Status string `json:"status"`
+	TxBlob string `json:"tx_blob"`
+	TxJson string `json:"tx_json"`
+}
+
+type submitTxReq struct {
+	TxBlob string `json:"tx_blob"`
+}
+
+type submitMultisignedTxReq struct {
+	TxJson string `json:"tx_json"`
 }

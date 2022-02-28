@@ -61,6 +61,82 @@ func (this *RpcClient) SetHttpClient(httpClient *http.Client) *RpcClient {
 	return this
 }
 
+//Sign sign method for an account
+func (this *RpcClient) Sign(account, secret, txJson string) (*SignRes, error) {
+	sigForReqParam := sigForReqParam{
+		Account: account,
+		Secret:  secret,
+		TxJson:  txJson,
+	}
+	respData, err := this.sendRpcRequest(RPC_SIGN, []interface{}{sigForReqParam})
+	if err != nil {
+		return nil, fmt.Errorf("SignFor: send req err: %s", err)
+	}
+	result := &SignRes{}
+	err = json.Unmarshal(respData, result)
+	if err != nil {
+		return nil, fmt.Errorf("SignFor: unmarshal resp err: %s, origin resp is %s", err, string(respData))
+	}
+	return result, nil
+}
+
+//SignFor sign method for multi-sign account
+func (this *RpcClient) SignFor(account, secret, txJson string) (*SignRes, error) {
+	sigForReqParam := sigForReqParam{
+		Account: account,
+		Secret:  secret,
+		TxJson:  txJson,
+	}
+	respData, err := this.sendRpcRequest(RPC_SIGN_FOR, []interface{}{sigForReqParam})
+	if err != nil {
+		return nil, fmt.Errorf("SignFor: send req err: %s", err)
+	}
+	result := &SignRes{}
+	err = json.Unmarshal(respData, result)
+	if err != nil {
+		return nil, fmt.Errorf("SignFor: unmarshal resp err: %s, origin resp is %s", err, string(respData))
+	}
+	return result, nil
+}
+
+func (this *RpcClient) Submit(txBlob string) error {
+	submitTxReq := submitTxReq{
+		TxBlob: txBlob,
+	}
+	respData, err := this.sendRpcRequest(RPC_SUBMIT, []interface{}{submitTxReq})
+	if err != nil {
+		return fmt.Errorf("Submit: send req err: %s", err)
+	}
+	submitRes := &websockets.SubmitResult{}
+	err = json.Unmarshal(respData, submitRes)
+	if err != nil {
+		return fmt.Errorf("Submit: unmarshal submit tx resp err: %s", err)
+	}
+	if !submitRes.EngineResult.Success() && !submitRes.EngineResult.Queued() {
+		return fmt.Errorf("Submit: submit tx resp failed, err: %s", submitRes.EngineResultMessage)
+	}
+	return nil
+}
+
+func (this *RpcClient) SubmitMultisigned(txJson string) error {
+	submitMultisignedTxReq := submitMultisignedTxReq{
+		TxJson: txJson,
+	}
+	respData, err := this.sendRpcRequest(RPC_SUBMIT_MULTISIGNED, []interface{}{submitMultisignedTxReq})
+	if err != nil {
+		return fmt.Errorf("SubmitMultisigned: send req err: %s", err)
+	}
+	submitRes := &websockets.SubmitResult{}
+	err = json.Unmarshal(respData, submitRes)
+	if err != nil {
+		return fmt.Errorf("SubmitMultisigned: unmarshal submit tx resp err: %s", err)
+	}
+	if !submitRes.EngineResult.Success() && !submitRes.EngineResult.Queued() {
+		return fmt.Errorf("SubmitMultisigned: submit tx resp failed, err: %s", submitRes.EngineResultMessage)
+	}
+	return nil
+}
+
 func (this *RpcClient) GetAccountInfo(account string) (*websockets.AccountInfoResult, error) {
 	accountReqParam := accountInfoReqParam{
 		Account: account,

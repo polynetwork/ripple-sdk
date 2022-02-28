@@ -20,23 +20,30 @@ package types
 import (
 	"bytes"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"github.com/rubblelabs/ripple/data"
 )
 
-func GeneratePayment(from, to data.Account, amount data.Amount, fee data.Value, sequence uint32) *data.Payment {
-	payment := &data.Payment{
-		Destination: to,
-		Amount:      amount,
-	}
-	txBase := data.TxBase{
-		TransactionType: data.PAYMENT,
+type Payment struct {
+	TransactionType string
+	Account         string
+	Destination     string
+	Amount          string
+}
+
+func GeneratePaymentTxJson(from, to, amount string) (string, error) {
+	payment := &Payment{
+		TransactionType: "payment",
 		Account:         from,
-		Sequence:        sequence,
-		Fee:             fee,
+		Destination:     to,
+		Amount:          amount,
 	}
-	payment.TxBase = txBase
-	return payment
+	r, err := json.Marshal(payment)
+	if err != nil {
+		return "", err
+	}
+	return string(r), nil
 }
 
 func deserializeRawTx(rawTx string) (data.Transaction, error) {
