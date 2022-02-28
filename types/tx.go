@@ -32,12 +32,39 @@ type Payment struct {
 	Amount          string
 }
 
+type MultisignPayment struct {
+	TransactionType string
+	Account         string
+	Destination     string
+	Amount          string
+	Fee             string
+	Sequence        uint32
+	SigningPubKey   string
+}
+
 func GeneratePaymentTxJson(from, to, amount string) (string, error) {
 	payment := &Payment{
 		TransactionType: "payment",
 		Account:         from,
 		Destination:     to,
 		Amount:          amount,
+	}
+	r, err := json.Marshal(payment)
+	if err != nil {
+		return "", err
+	}
+	return string(r), nil
+}
+
+func GenerateMultisignPaymentTxJson(from, to, amount, fee string, sequence uint32) (string, error) {
+	payment := &MultisignPayment{
+		TransactionType: "payment",
+		Account:         from,
+		Destination:     to,
+		Amount:          amount,
+		Fee:             fee,
+		Sequence:        sequence,
+		SigningPubKey:   "",
 	}
 	r, err := json.Marshal(payment)
 	if err != nil {
