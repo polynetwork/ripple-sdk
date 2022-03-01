@@ -61,6 +61,40 @@ func (this *RpcClient) SetHttpClient(httpClient *http.Client) *RpcClient {
 	return this
 }
 
+func (this *RpcClient) GetCurrentHeight() (uint32, error) {
+	respData, err := this.sendRpcRequest(RPC_LEDGER_CLOSED, []interface{}{})
+	if err != nil {
+		return 0, fmt.Errorf("GetCurrentHeight: send req err: %s", err)
+	}
+	result := &heightResp{}
+	err = json.Unmarshal(respData, result)
+	if err != nil {
+		return 0, fmt.Errorf("GetCurrentHeight: unmarshal resp err: %s, origin resp is %s", err, string(respData))
+	}
+	if result.Result.Status != "success" {
+		return 0, fmt.Errorf("GetCurrentHeight, resp failed, status: %s", result.Result.Status)
+	}
+	return result.Result.LedgerIndex, nil
+}
+
+func (this *RpcClient) GetLedger(height uint32) (*websockets.LedgerResult, error) {
+	ledgerReqParam := ledgerReqParam{
+		LedgerIndex:  height,
+		Transactions: true,
+		Expand:       true,
+	}
+	respData, err := this.sendRpcRequest(RPC_LEDGER, []interface{}{ledgerReqParam})
+	if err != nil {
+		return nil, fmt.Errorf("GetLedger: send req err: %s", err)
+	}
+	result := &websockets.LedgerCommand{}
+	err = json.Unmarshal(respData, result)
+	if err != nil {
+		return nil, fmt.Errorf("GetLedger: unmarshal resp err: %s, origin resp is %s", err, string(respData))
+	}
+	return result.Result, nil
+}
+
 //Sign sign method for an account
 func (this *RpcClient) Sign(account, secret, txJson string) (*SignRes, error) {
 	sigForReqParam := sigForReqParam{

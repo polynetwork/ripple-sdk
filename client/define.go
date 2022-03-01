@@ -25,6 +25,8 @@ const (
 	RPC_SIGN               = "sign"
 	RPC_SUBMIT             = "submit"
 	RPC_SUBMIT_MULTISIGNED = "submit_multisigned"
+	RPC_LEDGER_CLOSED      = "ledger_closed"
+	RPC_LEDGER = "ledger"
 )
 
 type JsonRpcRequest struct {
@@ -61,4 +63,18 @@ type submitTxReq struct {
 
 type submitMultisignedTxReq struct {
 	TxJson string `json:"tx_json"`
+}
+
+type heightResp struct {
+	Result struct {
+		LedgerHash  string `json:"ledger_hash"`
+		LedgerIndex uint32 `json:"ledger_index"`
+		Status      string `json:"status"`
+	} `json:"result"`
+}
+
+type ledgerReqParam struct {
+	LedgerIndex  uint32 `json:"ledger_index"`
+	Transactions bool   `json:"transactions"`
+	Expand       bool   `json:"expand"`
 }
