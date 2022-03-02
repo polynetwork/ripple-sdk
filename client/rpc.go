@@ -203,7 +203,7 @@ func (this *RpcClient) GetFee() (*websockets.FeeResult, error) {
 }
 
 //Tx return the tx info of hash
-func (this *RpcClient) GetTx(hash string) (*websockets.TxCommand, error) {
+func (this *RpcClient) GetTx(hash string) (*websockets.TxResult, error) {
 	txReqParam := txReqParam{
 		Transaction: hash,
 		Binary:      false,
@@ -217,7 +217,7 @@ func (this *RpcClient) GetTx(hash string) (*websockets.TxCommand, error) {
 	if err != nil {
 		return nil, fmt.Errorf("GetTx: unmarshal resp err: %s, origin resp is %s", err, string(respData))
 	}
-	return result, nil
+	return result.Result, nil
 }
 
 //sendRpcRequest send Rpc request to ripple
