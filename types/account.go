@@ -27,8 +27,8 @@ import (
 )
 
 type Account struct {
-	account data.Account
-	key     crypto.Key
+	Account data.Account
+	Key     crypto.Key
 }
 
 type Wallet struct {
@@ -47,7 +47,7 @@ func ImportAccount(secret string) (*Account, error) {
 	if err != nil {
 		return nil, fmt.Errorf("ImportAccount: construct account secret, err: %s", err)
 	}
-	account.key = accountKey
+	account.Key = accountKey
 
 	var signSequence uint32
 	accountAddr, err := crypto.AccountId(accountKey, &signSequence)
@@ -56,7 +56,7 @@ func ImportAccount(secret string) (*Account, error) {
 	}
 	var acc data.Account
 	copy(acc[:], accountAddr.Payload())
-	account.account = acc
+	account.Account = acc
 	return account, nil
 }
 
@@ -82,7 +82,7 @@ func NewAccount() (*Account, *Wallet, error) {
 	var addr data.Account
 	copy(addr[:], accountAddr.Payload())
 
-	return &Account{account: addr, key: accountKey},
+	return &Account{Account: addr, Key: accountKey},
 		&Wallet{accountAddr.String(), accountSeed.String()}, nil
 }
 
@@ -91,10 +91,10 @@ func (this *Account) SignTx(rawTx string) (hash, signedTx string, err error) {
 	if err != nil {
 		return "", "", fmt.Errorf("SignAccountTx: deserialized tx failed, err: %s", err)
 	}
-	if tx.GetBase().Account != this.account {
+	if tx.GetBase().Account != this.Account {
 		return "", "", fmt.Errorf("SignAccountTx: tx account not self account")
 	}
-	return signTx(tx, this.key)
+	return signTx(tx, this.Key)
 }
 
 func signTx(tx data.Transaction, key crypto.Key) (hash, signedTx string, err error) {
