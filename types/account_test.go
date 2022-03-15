@@ -18,6 +18,9 @@
 package types
 
 import (
+	"encoding/hex"
+	"fmt"
+	"github.com/rubblelabs/ripple/data"
 	"testing"
 
 	"github.com/rubblelabs/ripple/crypto"
@@ -28,7 +31,7 @@ func TestImportAccount(t *testing.T) {
 	account, err := ImportAccount("shtew2z1TRsEvpnYUGtiyvqPnYywt")
 	assert.Nil(t, err)
 	var zeroSequence uint32
-	accountId, err := crypto.AccountId(account.key, &zeroSequence)
+	accountId, err := crypto.AccountId(account.Key, &zeroSequence)
 	assert.Nil(t, err)
 	assert.Equal(t, "rLi6oSF38EdP7mzhdccyxhfd8vp8FWbsWF", accountId.String())
 }
@@ -39,6 +42,12 @@ func TestNewAccount(t *testing.T) {
 
 	account_n, err := ImportAccount(wallet.Seed)
 	assert.Nil(t, err)
-	assert.Equal(t, account_m.key, account_n.key)
-	assert.Equal(t, account_m.account, account_n.account)
+	assert.Equal(t, account_m.Key, account_n.Key)
+	assert.Equal(t, account_m.Account, account_n.Account)
+}
+
+func TestAddressToAccount(t *testing.T) {
+	account, err := data.NewAccountFromAddress("rsHYGX2AoQ4tXqFywzEeeTDgXFTUfL1Fw9")
+	assert.Nil(t, err)
+	fmt.Println(hex.EncodeToString(account.Bytes()))
 }
