@@ -17,6 +17,8 @@
 
 package client
 
+import "github.com/polynetwork/ripple-sdk/types"
+
 const (
 	RPC_TX                 = "tx"
 	RPC_FEE                = "fee"
@@ -26,7 +28,7 @@ const (
 	RPC_SUBMIT             = "submit"
 	RPC_SUBMIT_MULTISIGNED = "submit_multisigned"
 	RPC_LEDGER_CLOSED      = "ledger_closed"
-	RPC_LEDGER = "ledger"
+	RPC_LEDGER             = "ledger"
 )
 
 type JsonRpcRequest struct {
@@ -46,15 +48,18 @@ type accountInfoReqParam struct {
 }
 
 type sigForReqParam struct {
-	Account string `json:"account"`
-	Secret  string `json:"secret"`
-	TxJson  string `json:"tx_json"`
+	Account string                  `json:"account"`
+	Secret  string                  `json:"secret"`
+	TxJson  *types.MultisignPayment `json:"tx_json"`
 }
 
 type SignRes struct {
-	Status string `json:"status"`
-	TxBlob string `json:"tx_blob"`
-	TxJson string `json:"tx_json"`
+	Result struct {
+		Status       string                  `json:"status"`
+		TxBlob       string                  `json:"tx_blob"`
+		TxJson       *types.MultisignPayment `json:"tx_json"`
+		ErrorMessage string                  `json:"error_message"`
+	} `json:"result"`
 }
 
 type submitTxReq struct {

@@ -21,6 +21,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/polynetwork/ripple-sdk/types"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -96,7 +97,7 @@ func (this *RpcClient) GetLedger(height uint32) (*websockets.LedgerResult, error
 }
 
 //Sign sign method for an account
-func (this *RpcClient) Sign(account, secret, txJson string) (*SignRes, error) {
+func (this *RpcClient) Sign(account, secret string, txJson *types.MultisignPayment) (*SignRes, error) {
 	sigForReqParam := sigForReqParam{
 		Account: account,
 		Secret:  secret,
@@ -115,7 +116,7 @@ func (this *RpcClient) Sign(account, secret, txJson string) (*SignRes, error) {
 }
 
 //SignFor sign method for multi-sign account
-func (this *RpcClient) SignFor(account, secret, txJson string) (*SignRes, error) {
+func (this *RpcClient) SignFor(account, secret string, txJson *types.MultisignPayment) (*SignRes, error) {
 	sigForReqParam := sigForReqParam{
 		Account: account,
 		Secret:  secret,

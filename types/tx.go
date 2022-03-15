@@ -40,11 +40,20 @@ type MultisignPayment struct {
 	Fee             string
 	Sequence        uint32
 	SigningPubKey   string
+	Signers         []*Signer
+}
+
+type Signer struct {
+	Signer struct {
+		Account       string
+		SigningPubKey string
+		TxnSignature  string
+	} `json:"Signer"`
 }
 
 func GeneratePaymentTxJson(from, to, amount string) (string, error) {
 	payment := &Payment{
-		TransactionType: "payment",
+		TransactionType: "Payment",
 		Account:         from,
 		Destination:     to,
 		Amount:          amount,
@@ -58,7 +67,7 @@ func GeneratePaymentTxJson(from, to, amount string) (string, error) {
 
 func GenerateMultisignPaymentTxJson(from, to, amount, fee string, sequence uint32) (string, error) {
 	payment := &MultisignPayment{
-		TransactionType: "payment",
+		TransactionType: "Payment",
 		Account:         from,
 		Destination:     to,
 		Amount:          amount,
