@@ -30,7 +30,7 @@ type Payment struct {
 	Account         string
 	Destination     string
 	Amount          string
-	Hash            string
+	hash            string
 }
 
 type MultisignPayment struct {
@@ -42,7 +42,7 @@ type MultisignPayment struct {
 	Sequence        uint32
 	SigningPubKey   string
 	Signers         []*Signer `json:"Signers,omitempty"`
-	Hash            string
+	hash            string
 }
 
 type Signer struct {
