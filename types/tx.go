@@ -30,7 +30,7 @@ type Payment struct {
 	Account         string `json:"Account,omitempty"`
 	Destination     string `json:"Destination,omitempty"`
 	Amount          string `json:"Amount,omitempty"`
-	Hash            string `json:"hash"`
+	Hash            string `json:"hash",omitempty`
 }
 
 type MultisignPayment struct {
@@ -42,7 +42,7 @@ type MultisignPayment struct {
 	Sequence        uint32    `json:"Sequence,omitempty"`
 	SigningPubKey   string    `json:"SigningPubKey,omitempty"`
 	Signers         []*Signer `json:"Signers,omitempty"`
-	Hash            string    `json:"hash"`
+	Hash            string    `json:"hash,omitempty"`
 }
 
 type Signer struct {
