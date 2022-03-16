@@ -67,7 +67,7 @@ type submitTxReq struct {
 }
 
 type submitMultisignedTxReq struct {
-	TxJson string `json:"tx_json"`
+	TxJson *types.MultisignPayment `json:"tx_json"`
 }
 
 type heightResp struct {

@@ -153,7 +153,7 @@ func (this *RpcClient) Submit(txBlob string) error {
 	return nil
 }
 
-func (this *RpcClient) SubmitMultisigned(txJson string) error {
+func (this *RpcClient) SubmitMultisigned(txJson *types.MultisignPayment) error {
 	submitMultisignedTxReq := submitMultisignedTxReq{
 		TxJson: txJson,
 	}
