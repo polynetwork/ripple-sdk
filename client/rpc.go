@@ -134,42 +134,36 @@ func (this *RpcClient) SignFor(account, secret string, txJson *types.MultisignPa
 	return result, nil
 }
 
-func (this *RpcClient) Submit(txBlob string) error {
+func (this *RpcClient) Submit(txBlob string) (*SubmitRes, error) {
 	submitTxReq := submitTxReq{
 		TxBlob: txBlob,
 	}
 	respData, err := this.sendRpcRequest(RPC_SUBMIT, []interface{}{submitTxReq})
 	if err != nil {
-		return fmt.Errorf("Submit: send req err: %s", err)
+		return nil, fmt.Errorf("Submit: send req err: %s", err)
 	}
-	submitRes := &websockets.SubmitResult{}
+	submitRes := &SubmitRes{}
 	err = json.Unmarshal(respData, submitRes)
 	if err != nil {
-		return fmt.Errorf("Submit: unmarshal submit tx resp err: %s", err)
+		return nil, fmt.Errorf("Submit: unmarshal submit tx resp err: %s", err)
 	}
-	if !submitRes.EngineResult.Success() && !submitRes.EngineResult.Queued() {
-		return fmt.Errorf("Submit: submit tx resp failed, err: %s", submitRes.EngineResultMessage)
-	}
-	return nil
+	return submitRes, nil
 }
 
-func (this *RpcClient) SubmitMultisigned(txJson *types.MultisignPayment) error {
+func (this *RpcClient) SubmitMultisigned(txJson *types.MultisignPayment) (*SubmitMultisignRes, error) {
 	submitMultisignedTxReq := submitMultisignedTxReq{
 		TxJson: txJson,
 	}
 	respData, err := this.sendRpcRequest(RPC_SUBMIT_MULTISIGNED, []interface{}{submitMultisignedTxReq})
 	if err != nil {
-		return fmt.Errorf("SubmitMultisigned: send req err: %s", err)
+		return nil, fmt.Errorf("SubmitMultisigned: send req err: %s", err)
 	}
-	submitRes := &websockets.SubmitResult{}
+	submitRes := &SubmitMultisignRes{}
 	err = json.Unmarshal(respData, submitRes)
 	if err != nil {
-		return fmt.Errorf("SubmitMultisigned: unmarshal submit tx resp err: %s", err)
+		return nil, fmt.Errorf("SubmitMultisigned: unmarshal submit tx resp err: %s", err)
 	}
-	if !submitRes.EngineResult.Success() && !submitRes.EngineResult.Queued() {
-		return fmt.Errorf("SubmitMultisigned: submit tx resp failed, err: %s", submitRes.EngineResultMessage)
-	}
-	return nil
+	return submitRes, nil
 }
 
 func (this *RpcClient) GetAccountInfo(account string) (*websockets.AccountInfoResult, error) {

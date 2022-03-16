@@ -26,21 +26,23 @@ import (
 )
 
 type Payment struct {
-	TransactionType string
-	Account         string
-	Destination     string
-	Amount          string
+	TransactionType string `json:"TransactionType,omitempty"`
+	Account         string `json:"Account,omitempty"`
+	Destination     string `json:"Destination,omitempty"`
+	Amount          string `json:"Amount,omitempty"`
+	Hash            string `json:"hash"`
 }
 
 type MultisignPayment struct {
-	TransactionType string
-	Account         string
-	Destination     string
-	Amount          string
-	Fee             string
-	Sequence        uint32
-	SigningPubKey   string
-	Signers         []*Signer
+	TransactionType string    `json:"TransactionType,omitempty"`
+	Account         string    `json:"Account,omitempty"`
+	Destination     string    `json:"Destination,omitempty"`
+	Amount          string    `json:"Amount,omitempty"`
+	Fee             string    `json:"Fee,omitempty"`
+	Sequence        uint32    `json:"Sequence,omitempty"`
+	SigningPubKey   string    `json:"SigningPubKey,omitempty"`
+	Signers         []*Signer `json:"Signers,omitempty"`
+	Hash            string    `json:"hash"`
 }
 
 type Signer struct {
