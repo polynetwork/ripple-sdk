@@ -20,80 +20,24 @@ package types
 import (
 	"bytes"
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"github.com/rubblelabs/ripple/data"
 )
 
-type Payment struct {
-	TransactionType string
-	Account         string
-	Destination     string
-	Amount          string
-	Memos           []Memo `json:"Memos,omitempty"`
-	hash            string
-}
-
-type MultisignPayment struct {
-	TransactionType string
-	Account         string
-	Destination     string
-	Amount          string
-	Fee             string
-	Sequence        uint32
-	SigningPubKey   string
-	Memos           []Memo    `json:"Memos,omitempty"`
-	Signers         []*Signer `json:"Signers,omitempty"`
-	hash            string
-}
-
-type Memo struct {
-	Memo struct {
-		MemoType   string
-		MemoData   string
-		MemoFormat string
+func GeneratePayment(from, to data.Account, amount data.Amount, fee data.Value, sequence uint32, memos []data.Memo) *data.Payment {
+	payment := &data.Payment{
+		Destination: to,
+		Amount:      amount,
 	}
-}
-
-type Signer struct {
-	Signer struct {
-		Account       string
-		SigningPubKey string
-		TxnSignature  string
-	} `json:"Signer"`
-}
-
-func GeneratePaymentTxJson(from, to, amount string, memos []Memo) (string, error) {
-	payment := &Payment{
-		TransactionType: "Payment",
+	txBase := data.TxBase{
+		TransactionType: data.PAYMENT,
 		Account:         from,
-		Destination:     to,
-		Amount:          amount,
-		Memos:           memos,
-	}
-	r, err := json.Marshal(payment)
-	if err != nil {
-		return "", err
-	}
-	return string(r), nil
-}
-
-func GenerateMultisignPaymentTxJson(from, to, amount, fee string, sequence uint32, memos []Memo) (string, error) {
-	payment := &MultisignPayment{
-		TransactionType: "Payment",
-		Account:         from,
-		Destination:     to,
-		Amount:          amount,
-		Fee:             fee,
 		Sequence:        sequence,
-		SigningPubKey:   "",
+		Fee:             fee,
 		Memos:           memos,
 	}
-	r, err := json.Marshal(payment)
-	if err != nil {
-		return "", err
-	}
-	return string(r), nil
+	payment.TxBase = txBase
+	return payment
 }
 
 func deserializeRawTx(rawTx string) (data.Transaction, error) {

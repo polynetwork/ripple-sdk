@@ -19,6 +19,7 @@ package types
 
 import (
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"github.com/rubblelabs/ripple/data"
 	"testing"
@@ -50,4 +51,27 @@ func TestAddressToAccount(t *testing.T) {
 	account, err := data.NewAccountFromAddress("rsHYGX2AoQ4tXqFywzEeeTDgXFTUfL1Fw9")
 	assert.Nil(t, err)
 	fmt.Println(hex.EncodeToString(account.Bytes()))
+}
+
+func TestMultiSign(t *testing.T) {
+	signer, err := ImportAccount("shtew2z1TRsEvpnYUGtiyvqPnYywt")
+	to, _ := data.NewAccountFromAddress("rT4vRkeJsgaq7t6TVJJPsbrQp5oKMGRfN")
+	from, _ := data.NewAccountFromAddress("rsHYGX2AoQ4tXqFywzEeeTDgXFTUfL1Fw9")
+	amount, _ := data.NewAmount("13/XRP")
+	fee, _ := data.NewValue("0.00005", true)
+	memoType, _ := hex.DecodeString("706f6c7968617368")
+	memoData, _ := hex.DecodeString("706f6c7968617368")
+	memos := data.Memos{}
+	memo := data.Memo{}
+	memo.Memo.MemoType = memoType
+	memo.Memo.MemoData = memoData
+	memos = append(memos, memo)
+
+	payment := GeneratePayment(*from, *to, *amount, *fee, 25336389, memos)
+	_, raw, err := data.Raw(payment)
+	assert.Nil(t, err)
+	p, err := signer.MultiSignTx(hex.EncodeToString(raw))
+	assert.Nil(t, err)
+	r, _ := json.Marshal(p)
+	fmt.Println(string(r))
 }

@@ -86,28 +86,21 @@ func NewAccount() (*Account, *Wallet, error) {
 		&Wallet{accountAddr.String(), accountSeed.String()}, nil
 }
 
-func (this *Account) SignTx(rawTx string) (hash, signedTx string, err error) {
+func (this *Account) MultiSignTx(rawTx string) (*data.Payment, error) {
 	tx, err := deserializeRawTx(rawTx)
 	if err != nil {
-		return "", "", fmt.Errorf("SignAccountTx: deserialized tx failed, err: %s", err)
+		return nil, fmt.Errorf("MultiSignTx: deserialized tx failed, err: %s", err)
 	}
-	if tx.GetBase().Account != this.Account {
-		return "", "", fmt.Errorf("SignAccountTx: tx account not self account")
-	}
-	return signTx(tx, this.Key)
+	payment := tx.(*data.Payment)
+	payment.InitialiseForMultiSigning()
+	return multiSignTx(payment, this.Key, this.Account)
 }
 
-func signTx(tx data.Transaction, key crypto.Key) (hash, signedTx string, err error) {
+func multiSignTx(tx *data.Payment, key crypto.Key, account data.Account) (*data.Payment, error) {
 	var signTxSequence uint32
-	err = data.Sign(tx, key, &signTxSequence)
+	err := data.MultiSign(tx, key, &signTxSequence, account)
 	if err != nil {
-		return "", "", fmt.Errorf("signTx: sign tx failed, err: %s", err)
+		return nil, fmt.Errorf("multiSignTx: multi sign tx failed, err: %s", err)
 	}
-	txHash, signedTxData, err := data.Raw(tx)
-	if err != nil {
-		return "", "", fmt.Errorf("signTx: serialize signed tx failed, err: %s", err)
-	}
-	hash = txHash.String()
-	signedTx = fmt.Sprintf("%x", signedTxData)
-	return hash, signedTx, nil
+	return tx, nil
 }
