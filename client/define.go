@@ -24,8 +24,6 @@ const (
 	RPC_FEE                = "fee"
 	RPC_ACCOUNT_INFO       = "account_info"
 	RPC_SIGN_FOR           = "sign_for"
-	RPC_SIGN               = "sign"
-	RPC_SUBMIT             = "submit"
 	RPC_SUBMIT_MULTISIGNED = "submit_multisigned"
 	RPC_LEDGER_CLOSED      = "ledger_closed"
 	RPC_LEDGER             = "ledger"
@@ -59,17 +57,6 @@ type SignRes struct {
 		TxBlob       string                  `json:"tx_blob"`
 		TxJson       *types.MultisignPayment `json:"tx_json"`
 		ErrorMessage string                  `json:"error_message"`
-	} `json:"result"`
-}
-
-type SubmitRes struct {
-	Result struct {
-		Status              string         `json:"status"`
-		TxBlob              string         `json:"tx_blob"`
-		TxJson              *types.Payment `json:"tx_json"`
-		ErrorMessage        string         `json:"error_message"`
-		EngineResult        string         `json:"engine_result"`
-		EngineResultMessage string         `json:"engine_result_message"`
 	} `json:"result"`
 }
 

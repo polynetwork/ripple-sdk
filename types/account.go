@@ -87,12 +87,10 @@ func NewAccount() (*Account, *Wallet, error) {
 }
 
 func (this *Account) MultiSignTx(rawTx string) (*data.Payment, error) {
-	tx, err := deserializeRawTx(rawTx)
+	payment, err := DeserializeRawMultiSignTx(rawTx)
 	if err != nil {
 		return nil, fmt.Errorf("MultiSignTx: deserialized tx failed, err: %s", err)
 	}
-	payment := tx.(*data.Payment)
-	payment.InitialiseForMultiSigning()
 	return multiSignTx(payment, this.Key, this.Account)
 }
 
@@ -103,4 +101,19 @@ func multiSignTx(tx *data.Payment, key crypto.Key, account data.Account) (*data.
 		return nil, fmt.Errorf("multiSignTx: multi sign tx failed, err: %s", err)
 	}
 	return tx, nil
+}
+
+func CheckMultiSign(rawTx string, signer data.Account, pk, signature []byte) error {
+	payment, err := DeserializeRawMultiSignTx(rawTx)
+	if err != nil {
+		return fmt.Errorf("CheckMultiSign: deserialized tx failed, err: %s", err)
+	}
+	ok, err := data.CheckMultiSignature(payment, signer, pk, signature)
+	if err != nil {
+		return fmt.Errorf("CheckMultiSign: data.CheckMultiSignature error: %s", err)
+	}
+	if !ok {
+		return fmt.Errorf("CheckMultiSign: data.CheckMultiSignature failed")
+	}
+	return nil
 }

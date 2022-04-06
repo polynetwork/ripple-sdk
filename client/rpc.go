@@ -96,25 +96,6 @@ func (this *RpcClient) GetLedger(height uint32) (*websockets.LedgerResult, error
 	return result.Result, nil
 }
 
-//Sign sign method for an account
-func (this *RpcClient) Sign(account, secret string, txJson *types.MultisignPayment) (*SignRes, error) {
-	sigForReqParam := sigForReqParam{
-		Account: account,
-		Secret:  secret,
-		TxJson:  txJson,
-	}
-	respData, err := this.sendRpcRequest(RPC_SIGN, []interface{}{sigForReqParam})
-	if err != nil {
-		return nil, fmt.Errorf("SignFor: send req err: %s", err)
-	}
-	result := &SignRes{}
-	err = json.Unmarshal(respData, result)
-	if err != nil {
-		return nil, fmt.Errorf("SignFor: unmarshal resp err: %s, origin resp is %s", err, string(respData))
-	}
-	return result, nil
-}
-
 //SignFor sign method for multi-sign account
 func (this *RpcClient) SignFor(account, secret string, txJson *types.MultisignPayment) (*SignRes, error) {
 	sigForReqParam := sigForReqParam{
@@ -132,22 +113,6 @@ func (this *RpcClient) SignFor(account, secret string, txJson *types.MultisignPa
 		return nil, fmt.Errorf("SignFor: unmarshal resp err: %s, origin resp is %s", err, string(respData))
 	}
 	return result, nil
-}
-
-func (this *RpcClient) Submit(txBlob string) (*SubmitRes, error) {
-	submitTxReq := submitTxReq{
-		TxBlob: txBlob,
-	}
-	respData, err := this.sendRpcRequest(RPC_SUBMIT, []interface{}{submitTxReq})
-	if err != nil {
-		return nil, fmt.Errorf("Submit: send req err: %s", err)
-	}
-	submitRes := &SubmitRes{}
-	err = json.Unmarshal(respData, submitRes)
-	if err != nil {
-		return nil, fmt.Errorf("Submit: unmarshal submit tx resp err: %s", err)
-	}
-	return submitRes, nil
 }
 
 func (this *RpcClient) SubmitMultisigned(txJson *types.MultisignPayment) (*SubmitMultisignRes, error) {

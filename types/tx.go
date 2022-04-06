@@ -24,6 +24,35 @@ import (
 	"github.com/rubblelabs/ripple/data"
 )
 
+type MultisignPayment struct {
+	TransactionType string
+	Account         string
+	Destination     string
+	Amount          string
+	Fee             string
+	Sequence        uint32
+	SigningPubKey   string
+	Memos           []Memo    `json:"Memos,omitempty"`
+	Signers         []*Signer `json:"Signers,omitempty"`
+	hash            string
+}
+
+type Memo struct {
+	Memo struct {
+		MemoType   string
+		MemoData   string
+		MemoFormat string
+	}
+}
+
+type Signer struct {
+	Signer struct {
+		Account       string
+		SigningPubKey string
+		TxnSignature  string
+	} `json:"Signer"`
+}
+
 func GeneratePayment(from, to data.Account, amount data.Amount, fee data.Value, sequence uint32, memos []data.Memo) *data.Payment {
 	payment := &data.Payment{
 		Destination: to,
@@ -40,7 +69,7 @@ func GeneratePayment(from, to data.Account, amount data.Amount, fee data.Value, 
 	return payment
 }
 
-func deserializeRawTx(rawTx string) (data.Transaction, error) {
+func DeserializeRawMultiSignTx(rawTx string) (*data.Payment, error) {
 	txData, err := hex.DecodeString(rawTx)
 	if err != nil {
 		return nil, fmt.Errorf("deserializeRawTx: cannot decode raw tx, err: %s", err)
@@ -49,5 +78,7 @@ func deserializeRawTx(rawTx string) (data.Transaction, error) {
 	if err != nil {
 		return nil, fmt.Errorf("deserializeRawTx: parse raw tx failed, err: %s", err)
 	}
-	return tx, nil
+	payment := tx.(*data.Payment)
+	payment.InitialiseForMultiSigning()
+	return payment, nil
 }

@@ -57,8 +57,8 @@ func TestMultiSign(t *testing.T) {
 	signer, err := ImportAccount("shtew2z1TRsEvpnYUGtiyvqPnYywt")
 	to, _ := data.NewAccountFromAddress("rT4vRkeJsgaq7t6TVJJPsbrQp5oKMGRfN")
 	from, _ := data.NewAccountFromAddress("rsHYGX2AoQ4tXqFywzEeeTDgXFTUfL1Fw9")
-	amount, _ := data.NewAmount("13/XRP")
-	fee, _ := data.NewValue("0.00005", true)
+	amount, _ := data.NewAmount("13000000")
+	fee, _ := data.NewValue("50", false)
 	memoType, _ := hex.DecodeString("706f6c7968617368")
 	memoData, _ := hex.DecodeString("706f6c7968617368")
 	memos := data.Memos{}
@@ -74,4 +74,8 @@ func TestMultiSign(t *testing.T) {
 	assert.Nil(t, err)
 	r, _ := json.Marshal(p)
 	fmt.Println(string(r))
+
+	// test check multi sign
+	err = CheckMultiSign(hex.EncodeToString(raw), p.Signers[0].Account, p.Signers[0].SigningPubKey.Bytes(), *p.Signers[0].TxnSignature)
+	assert.Nil(t, err)
 }
