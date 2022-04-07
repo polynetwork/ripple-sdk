@@ -61,15 +61,8 @@ func TestMultiSign(t *testing.T) {
 	fee, _ := data.NewValue("0.00005", true)
 	//feeCost, _ := data.NewAmount("50")
 	//amount, _ = amount.Subtract(feeCost)
-	//memoType, _ := hex.DecodeString("706f6c7968617368")
-	//memoData, _ := hex.DecodeString("706f6c7968617368")
-	//memos := data.Memos{}
-	//memo := data.Memo{}
-	//memo.Memo.MemoType = memoType
-	//memo.Memo.MemoData = memoData
-	//memos = append(memos, memo)
 
-	payment := GeneratePayment(*from, *to, *amount, *fee, 25336389, nil)
+	payment := GeneratePayment(*from, *to, *amount, *fee, 25336389)
 	_, raw, err := data.Raw(payment)
 	assert.Nil(t, err)
 	p, err := signer.MultiSignTx(hex.EncodeToString(raw))

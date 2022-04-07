@@ -53,7 +53,7 @@ type Signer struct {
 	} `json:"Signer"`
 }
 
-func GeneratePayment(from, to data.Account, amount data.Amount, fee data.Value, sequence uint32, memos []data.Memo) *data.Payment {
+func GeneratePayment(from, to data.Account, amount data.Amount, fee data.Value, sequence uint32) *data.Payment {
 	payment := &data.Payment{
 		Destination: to,
 		Amount:      amount,
@@ -63,7 +63,6 @@ func GeneratePayment(from, to data.Account, amount data.Amount, fee data.Value, 
 		Account:         from,
 		Sequence:        sequence,
 		Fee:             fee,
-		Memos:           memos,
 	}
 	payment.TxBase = txBase
 	return payment
