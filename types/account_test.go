@@ -59,6 +59,8 @@ func TestMultiSign(t *testing.T) {
 	from, _ := data.NewAccountFromAddress("rsHYGX2AoQ4tXqFywzEeeTDgXFTUfL1Fw9")
 	amount, _ := data.NewAmount("13000000")
 	fee, _ := data.NewValue("50", false)
+	feeCost, _ := data.NewAmount("50")
+	amount, _ = amount.Subtract(feeCost)
 	memoType, _ := hex.DecodeString("706f6c7968617368")
 	memoData, _ := hex.DecodeString("706f6c7968617368")
 	memos := data.Memos{}
@@ -76,6 +78,7 @@ func TestMultiSign(t *testing.T) {
 	fmt.Println(string(r))
 
 	// test check multi sign
-	err = CheckMultiSign(hex.EncodeToString(raw), p.Signers[0].Account, p.Signers[0].SigningPubKey.Bytes(), *p.Signers[0].TxnSignature)
+	err = CheckMultiSign(hex.EncodeToString(raw), p.Signers[0].Signer.Account,
+		p.Signers[0].Signer.SigningPubKey.Bytes(), *p.Signers[0].Signer.TxnSignature)
 	assert.Nil(t, err)
 }
