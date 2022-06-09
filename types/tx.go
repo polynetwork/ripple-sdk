@@ -34,7 +34,10 @@ type MultisignPayment struct {
 	SigningPubKey   string
 	Memos           []Memo    `json:"Memos,omitempty"`
 	Signers         []*Signer `json:"Signers,omitempty"`
-	Hash            string    `json:"Hash,omitempty"`
+}
+
+type Response struct {
+	Hash string
 }
 
 type Memo struct {
