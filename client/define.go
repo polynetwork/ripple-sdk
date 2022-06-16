@@ -62,12 +62,12 @@ type SignRes struct {
 
 type SubmitMultisignRes struct {
 	Result struct {
-		Status              string                  `json:"status"`
-		TxBlob              string                  `json:"tx_blob"`
-		TxJson              *types.MultisignPayment `json:"tx_json"`
-		ErrorMessage        string                  `json:"error_message"`
-		EngineResult        string                  `json:"engine_result"`
-		EngineResultMessage string                  `json:"engine_result_message"`
+		Status              string          `json:"status"`
+		TxBlob              string          `json:"tx_blob"`
+		TxJson              *types.Response `json:"tx_json"`
+		ErrorMessage        string          `json:"error_message"`
+		EngineResult        string          `json:"engine_result"`
+		EngineResultMessage string          `json:"engine_result_message"`
 	} `json:"result"`
 }
 
