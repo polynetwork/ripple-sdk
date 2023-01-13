@@ -82,8 +82,8 @@ github.com/onsi/gomega v1.4.1/go.mod h1:C1qb7wdrVGGVU+Z6iS04AVkA3Q65CEZX59MT0QO5
 github.com/onsi/gomega v1.4.3/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1CpauHY=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/siovanus/ripple v0.0.0-20220406100637-81f6afe283d9 h1:jEBucgOSqVV1PmI9Qp5F8rEouevCjyVLVPy/DDXqFmg=
-github.com/siovanus/ripple v0.0.0-20220406100637-81f6afe283d9/go.mod h1:WfZLVgPZy2X9Xm9BbrVyFeahG2zStj8zHM/krsnARRg=
+github.com/siovanus/ripple v0.0.0-20230113075118-4a31480c1af2 h1:uTGRs4Gpk8dJCA6Qv/SGgZMhChSDceZIirfh+WH9+wI=
+github.com/siovanus/ripple v0.0.0-20230113075118-4a31480c1af2/go.mod h1:WfZLVgPZy2X9Xm9BbrVyFeahG2zStj8zHM/krsnARRg=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5CcY=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
