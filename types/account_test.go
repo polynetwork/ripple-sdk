@@ -48,7 +48,7 @@ func TestNewAccount(t *testing.T) {
 }
 
 func TestAddressToAccount(t *testing.T) {
-	account, err := data.NewAccountFromAddress("rsHYGX2AoQ4tXqFywzEeeTDgXFTUfL1Fw9")
+	account, err := data.NewAccountFromAddress("r37ToMmnEYrrTf4WWu47Myn8m5vVgHa3yG")
 	assert.Nil(t, err)
 	fmt.Println(hex.EncodeToString(account.Bytes()))
 }
